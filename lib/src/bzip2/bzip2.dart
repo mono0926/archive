@@ -1,18 +1,14 @@
 import 'dart:typed_data';
 
 class BZip2 {
-  static final Uint8List emptyUint8List =
-      UnmodifiableUint8ListView(Uint8List(0));
-  static final Uint32List emptyUint32List =
-      UnmodifiableUint32ListView(Uint32List(0));
-  static final Int32List emptyInt32List =
-      UnmodifiableInt32ListView(Int32List(0));
+  static final Uint8List emptyUint8List = Uint8List(0).asUnmodifiableView();
+  static final Uint32List emptyUint32List = Uint32List(0).asUnmodifiableView();
+  static final Int32List emptyInt32List = Int32List(0).asUnmodifiableView();
 
   static int initialCrc = 0xffffffff;
 
   static int updateCrc(int value, int crc) {
-    return ((crc << 8) ^
-            _bz2Crc32Table[(crc >> 24) & 0xff ^ (value & 0xff)]) &
+    return ((crc << 8) ^ _bz2Crc32Table[(crc >> 24) & 0xff ^ (value & 0xff)]) &
         0xffffffff;
   }
 
@@ -24,14 +20,7 @@ class BZip2 {
 
   static const int hdr0 = 0x30;
 
-  static const List<int> compressedMagic = [
-    0x31,
-    0x41,
-    0x59,
-    0x26,
-    0x53,
-    0x59
-  ];
+  static const List<int> compressedMagic = [0x31, 0x41, 0x59, 0x26, 0x53, 0x59];
 
   static const List<int> eosMagic = [0x17, 0x72, 0x45, 0x38, 0x50, 0x90];
 

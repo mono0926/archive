@@ -48,8 +48,8 @@ class ZipFileEncoder {
     for (var file in files) {
       if (file is Directory) {
         var filename = path.relative(file.path, from: dir.path);
-        filename = includeDirName ? (dirName + '/' + filename) : filename;
-        final af = ArchiveFile(filename + '/', 0, null);
+        filename = includeDirName ? ('$dirName/$filename') : filename;
+        final af = ArchiveFile('$filename/', 0, null);
         af.mode = file.statSync().mode;
         af.isFile = false;
         _encoder.addFile(af);
@@ -57,7 +57,7 @@ class ZipFileEncoder {
         final dirName = path.basename(dir.path);
         final relPath = path.relative(file.path, from: dir.path);
         futures.add(addFile(
-            file, includeDirName ? (dirName + '/' + relPath) : relPath, level));
+            file, includeDirName ? ('$dirName/$relPath') : relPath, level));
       }
     }
     await Future.wait(futures);
